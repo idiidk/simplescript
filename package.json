@@ -1,0 +1,29 @@
+{
+  "name": "simplescript",
+  "version": "0.1.0",
+  "description": "A simplescript to javascript transpiler",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha",
+    "build": "./node_modules/.bin/babel src -d bin && chmod +x bin/*",
+    "start": "npm run build && simple"
+  },
+  "keywords": [
+    "transpiler",
+    "transpile",
+    "simplescript"
+  ],
+  "author": "Vincent Brouwer (idiidk)",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "mocha": "^4.0.1"
+  },
+  "bin": {
+    "simple": "bin/SimpleScript.js"
+  },
+  "dependencies": {
+    "chalk": "^2.3.0"
+  }
+}
