@@ -8,7 +8,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var identifierList = [{ starters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0], identifier: "integer" }, { starters: ["*", "+", "/", "-"], identifier: "mathsymbol" }];
+var identifierList = [{ starters: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"], identifier: "integer" }, { starters: ["*", "+", "/", "-"], identifier: "mathsymbol" }];
 
 var skipList = ["\n", " "];
 
@@ -34,9 +34,11 @@ var Transpiler = function () {
         key: "computeTokenData",
         value: function computeTokenData(data, startIndex, identifier) {
             var finalToken = "";
+            var continueValue = startIndex - 1;
 
             for (var i = startIndex; i < data.length; i++) {
                 var char = data[i];
+                continueValue++;
 
                 if (inArray(identifier.starters, char)) {
                     if (skipList.indexOf(char) === -1) {
@@ -47,7 +49,7 @@ var Transpiler = function () {
                 }
             }
 
-            return finalToken;
+            return { data: finalToken, continueValue: continueValue };
         }
     }, {
         key: "lexicallyAnalyze",
@@ -61,7 +63,9 @@ var Transpiler = function () {
                     var identifier = identifierList[j];
 
                     if (inArray(identifier.starters, char)) {
-                        tokens.push(new Token(identifier.identifier, this.computeTokenData(data, i, identifier)));
+                        var tokenData = this.computeTokenData(data, i, identifier);
+                        tokens.push(new Token(identifier.identifier, tokenData.data));
+                        i = tokenData.continueValue;
                     }
                 }
             }

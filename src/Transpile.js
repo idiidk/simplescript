@@ -1,5 +1,5 @@
 const identifierList = [
-    { starters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0], identifier: "integer" },
+    { starters: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"], identifier: "integer" },
     { starters: ["*", "+", "/", "-"], identifier: "mathsymbol" }
 ];
 
@@ -23,9 +23,11 @@ class Token {
 class Transpiler {
     static computeTokenData(data, startIndex, identifier) {
         let finalToken = "";
+        let continueValue = startIndex - 1;
 
         for (let i = startIndex; i < data.length; i++) {
             const char = data[i];
+            continueValue++;
 
             if (inArray(identifier.starters, char)) {
                 if (skipList.indexOf(char) === -1) {
@@ -36,7 +38,7 @@ class Transpiler {
             }
         }
 
-        return finalToken;
+        return { data: finalToken, continueValue: continueValue };
     }
 
     static lexicallyAnalyze(data) {
@@ -49,7 +51,9 @@ class Transpiler {
                 const identifier = identifierList[j];
 
                 if (inArray(identifier.starters, char)) {
-                    tokens.push(new Token(identifier.identifier, this.computeTokenData(data, i, identifier)));
+                    let tokenData = this.computeTokenData(data, i, identifier);
+                    tokens.push(new Token(identifier.identifier, tokenData.data));
+                    i = tokenData.continueValue;
                 }
             }
         }
