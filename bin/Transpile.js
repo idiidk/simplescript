@@ -58,14 +58,18 @@ var Transpiler = function () {
 
             for (var i = 0; i < data.length; i++) {
                 var char = data[i];
+                console.log(char);
+                if (char === tokenEnd) {
+                    tokens.push(new Token("end", tokenEnd));
+                } else {
+                    for (var j = 0; j < identifierList.length; j++) {
+                        var identifier = identifierList[j];
 
-                for (var j = 0; j < identifierList.length; j++) {
-                    var identifier = identifierList[j];
-
-                    if (inArray(identifier.starters, char)) {
-                        var tokenData = this.computeTokenData(data, i, identifier);
-                        tokens.push(new Token(identifier.identifier, tokenData.data));
-                        i = tokenData.continueValue;
+                        if (inArray(identifier.starters, char)) {
+                            var tokenData = this.computeTokenData(data, i, identifier);
+                            tokens.push(new Token(identifier.identifier, tokenData.data));
+                            i = tokenData.continueValue - 1;
+                        }
                     }
                 }
             }

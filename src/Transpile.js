@@ -47,13 +47,17 @@ class Transpiler {
         for (let i = 0; i < data.length; i++) {
             const char = data[i];
 
-            for (let j = 0; j < identifierList.length; j++) {
-                const identifier = identifierList[j];
+            if (char === tokenEnd) {
+                tokens.push(new Token("end", tokenEnd));
+            } else {
+                for (let j = 0; j < identifierList.length; j++) {
+                    const identifier = identifierList[j];
 
-                if (inArray(identifier.starters, char)) {
-                    let tokenData = this.computeTokenData(data, i, identifier);
-                    tokens.push(new Token(identifier.identifier, tokenData.data));
-                    i = tokenData.continueValue;
+                    if (inArray(identifier.starters, char)) {
+                        let tokenData = this.computeTokenData(data, i, identifier);
+                        tokens.push(new Token(identifier.identifier, tokenData.data));
+                        i = tokenData.continueValue -1;
+                    }
                 }
             }
         }
